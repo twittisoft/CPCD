@@ -9,9 +9,12 @@ level = 0
 ballClicked = 0
 passive = 0
 pattern = "0f"
+bgValue = 0
+ring = false
+tjocklek = 10
 
 overlap = (x1,y1,x2,y2) -> 
-	result = dist(x1,y1,x2,y2) < radie*1.5 
+	result = dist(x1,y1,x2,y2) < radie 
 	if result
 		console.log dist(x1,y1,x2,y2), radie, x1,y1,x2,y2 
 	result 
@@ -57,51 +60,51 @@ reset = (delta)->
 setup = ->
 	createCanvas windowWidth, windowHeight
 	radie = windowHeight/4
-	#params = getParameters()
-	#console.log params
-	#if params == 0
-	pattern = '05af'
-	#else
-	#	pattern = params.pattern
+	params = getParameters()
+	console.log params
+	if _.size(params) == 0
+		pattern = '05af'
+	else
+		pattern = params.pattern
 	COLORS=createColors pattern
 	reset 1
 	#console.log getParameters()
 
 
 draw = ->
-	background 255
-	fill 240
+	background bgValue
+	fill 255-bgValue
 	textSize height/5
 	textAlign CENTER,CENTER
 	text level,width/2,height/2
 	text pattern,width/2,300
 	textSize height/50
-	fill 0
+	fill 255-bgValue
 	text '0123456789abcdef',width-100,50
 	for ball in balls
 		if ball.passive
+			push()
+			if ring 
+				stroke 255-bgValue
+			else
+				noStroke()
+			strokeWeight tjocklek
 			fill ball.rgb 
 			ellipse ball.x,ball.y,radie*2
 			# sc 0
 			# sw 5
 			# point ball.x,ball.y
+			pop()
 
 
 keyPressed = ->
-	#console.log key, keyCode
-	if key=="2" 
-		COLORS=createColors "0f"
-		reset 0
-	if key=="3" 
-		COLORS=createColors "08f"
-		reset 0
-	if key=="4" 
-		COLORS=createColors "05af"
-		reset 0
-	if key=="5" 
-		COLORS=createColors "048bf"
-		reset 0
-
+	console.log key, keyCode
+	if key== " "
+		bgValue=255-bgValue
+	if key== "r"
+		ring=not ring
+	if key== "1" then tjocklek--
+	if key== "2" then tjocklek++
 
 
 
