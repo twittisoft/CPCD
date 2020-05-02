@@ -1,1 +1,1 @@
-# CPCD
+# colorpair
